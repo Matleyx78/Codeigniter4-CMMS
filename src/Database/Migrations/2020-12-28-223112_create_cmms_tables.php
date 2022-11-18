@@ -13,8 +13,8 @@ class CreateCmmsTables extends Migration
     private $tab_sectors = array('tname' => 'impianti', 'pr' => 'impi', );
     private $tab_assets = array('tname' => 'macchine', 'pr' => 'macc', );
     private $tab_counters = array('tname' => 'contatori', 'pr' => 'cont', );
-    private $tab_co_intervals = array('tname' => 'intervalli_contatore', 'pr' => 'coin', );   //Counter interval
-    private $tab_wd_intervals = array('tname' => 'intervalli_giorni', 'pr' => 'wdin', );   //Working day interval
+    private $tab_co_intervals = array('tname' => 'intervalli_contatore', 'pr' => 'coin', ); //Counter interval
+    private $tab_wd_intervals = array('tname' => 'intervalli_giorni', 'pr' => 'wdin', ); //Working day interval
     private $tab_works = array('tname' => 'lavori', 'pr' => 'jobs', );
 
     public function up(): void
@@ -119,7 +119,7 @@ class CreateCmmsTables extends Migration
         $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_assets['pr'], $this->prefix_table . '' . $this->tab_assets['tname'], 'id_' . $this->tab_assets['pr'], '', 'CASCADE');
         $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_co_intervals['pr'], $this->prefix_table . '' . $this->tab_co_intervals['tname'], 'id_' . $this->tab_co_intervals['pr'], '', 'CASCADE');
         $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_wd_intervals['pr'], $this->prefix_table . '' . $this->tab_wd_intervals['tname'], 'id_' . $this->tab_wd_intervals['pr'], '', 'CASCADE');
-        $this->forge->createTable($this->prefix_table . '' . $this->tab_works['tname']);        
+        $this->forge->createTable($this->prefix_table . '' . $this->tab_works['tname']);
     }
 
     // --------------------------------------------------------------------
