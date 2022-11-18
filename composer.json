@@ -1,0 +1,15 @@
+{
+    "name": "matleyx/ci4-cmms",
+    "description": "CMMS package for Codeigniter 4",
+    "license": "MIT",
+    "require": {
+        "php": "^8.0",
+        "nelexa/zip": "*",
+        "phpoffice/phpspreadsheet": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Matleyx\\CI4CMMS\\": "src"
+        }
+    }
+}
