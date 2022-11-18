@@ -15,7 +15,9 @@ class CreateCmmsTables extends Migration
     private $tab_counters = array('tname' => 'contatori', 'pr' => 'cont', );
     private $tab_co_intervals = array('tname' => 'intervalli_contatore', 'pr' => 'coin', ); //Counter interval
     private $tab_wd_intervals = array('tname' => 'intervalli_giorni', 'pr' => 'wdin', ); //Working day interval
-    private $tab_works = array('tname' => 'lavori', 'pr' => 'jobs', );
+    private $tab_sched_jobs = array('tname' => 'lavori_dafare', 'pr' => 'scjb', );
+    private $tab_replace = array('tname' => 'ricambi', 'pr' => 'rica', );
+    private $tab_exec_jobs = array('tname' => 'lavori_eseguiti', 'pr' => 'exjb', );
 
     public function up(): void
     {
@@ -50,13 +52,16 @@ class CreateCmmsTables extends Migration
             'id_' . $this->tab_assets['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             $this->tab_assets['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 150],
             $this->tab_assets['pr'] . '_id_' . $this->tab_sectors['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+            $this->tab_assets['pr'] . '_id_' . $this->tab_buildings['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
             $this->tab_assets['pr'] . '_created_at' => ['type' => 'datetime', 'null' => true],
             $this->tab_assets['pr'] . '_updated_at' => ['type' => 'datetime', 'null' => true],
             $this->tab_assets['pr'] . '_deleted_at' => ['type' => 'datetime', 'null' => true],
         ]);
         $this->forge->addPrimaryKey('id_' . $this->tab_assets['pr']);
         $this->forge->addKey($this->tab_assets['pr'] . '_id_' . $this->tab_sectors['pr']);
+        $this->forge->addKey($this->tab_assets['pr'] . '_id_' . $this->tab_buildings['pr']);
         $this->forge->addForeignKey($this->tab_assets['pr'] . '_id_' . $this->tab_sectors['pr'], $this->prefix_table . '' . $this->tab_sectors['tname'], 'id_' . $this->tab_sectors['pr'], '', 'CASCADE');
+        $this->forge->addForeignKey($this->tab_assets['pr'] . '_id_' . $this->tab_buildings['pr'], $this->prefix_table . '' . $this->tab_buildings['tname'], 'id_' . $this->tab_buildings['pr'], '', 'CASCADE');
         $this->forge->createTable($this->prefix_table . '' . $this->tab_assets['tname']);
 
         // Counters
@@ -95,31 +100,35 @@ class CreateCmmsTables extends Migration
         $this->forge->addPrimaryKey('id_' . $this->tab_wd_intervals['pr']);
         $this->forge->createTable($this->prefix_table . '' . $this->tab_wd_intervals['tname']);
 
-        // Works
+        // Scheduled jobs
         $this->forge->addField([
-            'id_' . $this->tab_works['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            $this->tab_works['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 250],
-            $this->tab_works['pr'] . '_id_' . $this->tab_buildings['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-            $this->tab_works['pr'] . '_id_' . $this->tab_sectors['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-            $this->tab_works['pr'] . '_id_' . $this->tab_assets['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-            $this->tab_works['pr'] . '_id_' . $this->tab_co_intervals['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'null' => true],
-            $this->tab_works['pr'] . '_id_' . $this->tab_wd_intervals['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'null' => true],
-            $this->tab_works['pr'] . '_created_at' => ['type' => 'datetime', 'null' => true],
-            $this->tab_works['pr'] . '_updated_at' => ['type' => 'datetime', 'null' => true],
-            $this->tab_works['pr'] . '_deleted_at' => ['type' => 'datetime', 'null' => true],
+            'id_' . $this->tab_sched_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            $this->tab_sched_jobs['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 250],
+            $this->tab_sched_jobs['pr'] . '_tools' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
+            $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_buildings['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+            $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_sectors['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+            $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_assets['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+            $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_counters['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'null' => true],
+            $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_co_intervals['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'null' => true],
+            $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_wd_intervals['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'null' => true],
+            $this->tab_sched_jobs['pr'] . '_created_at' => ['type' => 'datetime', 'null' => true],
+            $this->tab_sched_jobs['pr'] . '_updated_at' => ['type' => 'datetime', 'null' => true],
+            $this->tab_sched_jobs['pr'] . '_deleted_at' => ['type' => 'datetime', 'null' => true],
         ]);
-        $this->forge->addPrimaryKey('id_' . $this->tab_works['pr']);
-        $this->forge->addKey($this->tab_works['pr'] . '_id_' . $this->tab_buildings['pr']);
-        $this->forge->addKey($this->tab_works['pr'] . '_id_' . $this->tab_sectors['pr']);
-        $this->forge->addKey($this->tab_works['pr'] . '_id_' . $this->tab_assets['pr']);
-        $this->forge->addKey($this->tab_works['pr'] . '_id_' . $this->tab_co_intervals['pr']);
-        $this->forge->addKey($this->tab_works['pr'] . '_id_' . $this->tab_wd_intervals['pr']);
-        $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_buildings['pr'], $this->prefix_table . '' . $this->tab_buildings['tname'], 'id_' . $this->tab_buildings['pr'], '', 'CASCADE');
-        $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_sectors['pr'], $this->prefix_table . '' . $this->tab_sectors['tname'], 'id_' . $this->tab_sectors['pr'], '', 'CASCADE');
-        $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_assets['pr'], $this->prefix_table . '' . $this->tab_assets['tname'], 'id_' . $this->tab_assets['pr'], '', 'CASCADE');
-        $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_co_intervals['pr'], $this->prefix_table . '' . $this->tab_co_intervals['tname'], 'id_' . $this->tab_co_intervals['pr'], '', 'CASCADE');
-        $this->forge->addForeignKey($this->tab_works['pr'] . '_id_' . $this->tab_wd_intervals['pr'], $this->prefix_table . '' . $this->tab_wd_intervals['tname'], 'id_' . $this->tab_wd_intervals['pr'], '', 'CASCADE');
-        $this->forge->createTable($this->prefix_table . '' . $this->tab_works['tname']);
+        $this->forge->addPrimaryKey('id_' . $this->tab_sched_jobs['pr']);
+        $this->forge->addKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_buildings['pr']);
+        $this->forge->addKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_sectors['pr']);
+        $this->forge->addKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_assets['pr']);
+        $this->forge->addKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_counters['pr']);
+        $this->forge->addKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_co_intervals['pr']);
+        $this->forge->addKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_wd_intervals['pr']);
+        $this->forge->addForeignKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_buildings['pr'], $this->prefix_table . '' . $this->tab_buildings['tname'], 'id_' . $this->tab_buildings['pr'], '', 'CASCADE');
+        $this->forge->addForeignKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_sectors['pr'], $this->prefix_table . '' . $this->tab_sectors['tname'], 'id_' . $this->tab_sectors['pr'], '', 'CASCADE');
+        $this->forge->addForeignKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_assets['pr'], $this->prefix_table . '' . $this->tab_assets['tname'], 'id_' . $this->tab_assets['pr'], '', 'CASCADE');
+        $this->forge->addForeignKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_counters['pr'], $this->prefix_table . '' . $this->tab_counters['tname'], 'id_' . $this->tab_counters['pr'], '', 'CASCADE');
+        $this->forge->addForeignKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_co_intervals['pr'], $this->prefix_table . '' . $this->tab_co_intervals['tname'], 'id_' . $this->tab_co_intervals['pr'], '', 'CASCADE');
+        $this->forge->addForeignKey($this->tab_sched_jobs['pr'] . '_id_' . $this->tab_wd_intervals['pr'], $this->prefix_table . '' . $this->tab_wd_intervals['tname'], 'id_' . $this->tab_wd_intervals['pr'], '', 'CASCADE');
+        $this->forge->createTable($this->prefix_table . '' . $this->tab_sched_jobs['tname']);
     }
 
     // --------------------------------------------------------------------
@@ -134,7 +143,7 @@ class CreateCmmsTables extends Migration
         $this->forge->dropTable($this->prefix_table . '' . $this->tab_counters['tname'], true);
         $this->forge->dropTable($this->prefix_table . '' . $this->tab_co_intervals['tname'], true);
         $this->forge->dropTable($this->prefix_table . '' . $this->tab_wd_intervals['tname'], true);
-        $this->forge->dropTable($this->prefix_table . '' . $this->tab_works['tname'], true);
+        $this->forge->dropTable($this->prefix_table . '' . $this->tab_sched_jobs['tname'], true);
 
         $this->db->enableForeignKeyChecks();
     }
