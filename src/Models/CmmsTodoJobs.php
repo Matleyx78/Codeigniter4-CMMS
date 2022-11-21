@@ -17,9 +17,9 @@ class CmmsTodoJobs extends Model
     protected $allowedFields    = [
         'tdjb_description',
         'tdjb_tools',
-        'tdjb_id_mntr_creator',
-        'tdjb_id_mntr_reference',
-        'tdjb_id_mntr_supervisor',
+        'tdjb_id_mtnr_creator',
+        'tdjb_id_mtnr_reference',
+        'tdjb_id_mtnr_supervisor',
         'tdjb_id_buil',
         'tdjb_id_sect',
         'tdjb_id_asst',
