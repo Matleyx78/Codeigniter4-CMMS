@@ -76,6 +76,7 @@ class CreateCmmsTables extends Migration
             $this->tab_assets['pr'] . '_serial_number' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
             $this->tab_assets['pr'] . '_tech_char' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
             $this->tab_assets['pr'] . '_fabbrication' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
+            $this->tab_assets['pr'] . '_note' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
             $this->tab_assets['pr'] . '_revision' => ['type' => 'boolean', 'default' => false],
             $this->tab_assets['pr'] . '_created_at' => ['type' => 'datetime', 'null' => true],
             $this->tab_assets['pr'] . '_updated_at' => ['type' => 'datetime', 'null' => true],

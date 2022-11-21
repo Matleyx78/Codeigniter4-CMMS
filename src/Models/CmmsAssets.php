@@ -26,6 +26,7 @@ class CmmsAssets extends Model
         'asst_serial_number', 
         'asst_tech_char', 
         'asst_fabbrication', 
+        'asst_note',
         'asst_revision',
     ];
 
