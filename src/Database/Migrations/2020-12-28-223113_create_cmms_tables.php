@@ -8,7 +8,7 @@ use CodeIgniter\Database\Migration;
 
 class CreateCmmsTables extends Migration
 {
-
+///prova modifiche
     private $prefix_table = 'cmms_';
     private $tab_manteiners = array('tname' => 'manteiners', 'pr' => 'mtnr',);     // Pivot Table with Codeigniter Shield
     private $tab_buildings = array('tname' => 'buildings', 'pr' => 'buil',);
@@ -141,6 +141,7 @@ class CreateCmmsTables extends Migration
         $this->forge->addField([
             'id_' . $this->tab_todo_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             $this->tab_todo_jobs['pr'] . '_type' => ['type' => 'boolean', 'default' => 0],      //0 = Monit, 1 = Manut
+            $this->tab_todo_jobs['pr'] . '_title' => ['type' => 'varchar', 'constraint' => 250],
             $this->tab_todo_jobs['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 250],
             $this->tab_todo_jobs['pr'] . '_tools' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
             $this->tab_todo_jobs['pr'] . '_id_' . $this->tab_manteiners['pr'] . '_creator' => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
@@ -183,6 +184,7 @@ class CreateCmmsTables extends Migration
         $this->forge->addField([
             'id_' . $this->tab_sched_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_todo_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+            $this->tab_sched_jobs['pr'] . '_status' => ['type' => 'int', 'constraint' => 2, 'unsigned' => true, 'default' => 0],//0=non iniziata, 1= incorso, 2=completata
             $this->tab_sched_jobs['pr'] . '_execute_by' => ['type' => 'varchar', 'constraint' => 250],
             $this->tab_sched_jobs['pr'] . '_time_exec_minut' => ['type' => 'int', 'constraint' => 4, 'unsigned' => true, 'default' => 0],
             $this->tab_sched_jobs['pr'] . '_comment' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],

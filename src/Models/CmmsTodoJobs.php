@@ -15,6 +15,7 @@ class CmmsTodoJobs extends Model
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
+        'tdjb_title',
         'tdjb_description',
         'tdjb_tools',
         'tdjb_id_mtnr_creator',
@@ -30,7 +31,7 @@ class CmmsTodoJobs extends Model
     ];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'tdjb_created_at';
     protected $updatedField  = 'tdjb_updated_at';

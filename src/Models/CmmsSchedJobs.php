@@ -16,6 +16,7 @@ class CmmsSchedJobs extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'scjb_id_tdjb',
+        'scjb_status',
         'scjb_execute_by',
         'scjb_time_exec_minut',
         'scjb_comment',
@@ -24,7 +25,7 @@ class CmmsSchedJobs extends Model
     ];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'scjb_created_at';
     protected $updatedField  = 'scjb_updated_at';
