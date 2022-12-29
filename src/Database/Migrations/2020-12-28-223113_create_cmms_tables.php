@@ -123,6 +123,7 @@ class CreateCmmsTables extends Migration
         $this->forge->addField([
             'id_' . $this->tab_wd_intervals['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             $this->tab_wd_intervals['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 150],
+            $this->tab_wd_intervals['pr'] . '_total_day_for_order' => ['type' => 'int', 'constraint' => 5, 'unsigned' => true, 'default' => 0],
             $this->tab_wd_intervals['pr'] . '_years' => ['type' => 'int', 'constraint' => 3, 'unsigned' => true, 'default' => 0],
             $this->tab_wd_intervals['pr'] . '_months' => ['type' => 'int', 'constraint' => 3, 'unsigned' => true, 'default' => 0],
             $this->tab_wd_intervals['pr'] . '_days' => ['type' => 'int', 'constraint' => 3, 'unsigned' => true, 'default' => 0],
