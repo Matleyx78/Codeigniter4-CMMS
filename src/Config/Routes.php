@@ -45,6 +45,7 @@ $routes->group('', ['namespace' => 'Matleyx\CI4CMMS\Controllers'], static functi
 	//Cmms Assets Routes
 	$routes->get('cmms_assets','CmmsAssetsController::index');
 	$routes->get('cmms_assets/add','CmmsAssetsController::add');
+	$routes->post('cmms_assets/aj_sel_sect','CmmsAssetsController::aj_sel_sect');
 	$routes->post('cmms_assets/save','CmmsAssetsController::save');
 	$routes->get('cmms_assets/edit/(:any)','CmmsAssetsController::edit/$1');
 	$routes->get('cmms_assets/asse_by_sect/(:any)','CmmsAssetsController::asse_by_sect/$1');
@@ -71,6 +72,7 @@ $routes->group('', ['namespace' => 'Matleyx\CI4CMMS\Controllers'], static functi
 	$routes->post('cmms_todo_jobs/save','CmmsTodoJobsController::save');
 	$routes->get('cmms_todo_jobs/edit/(:any)','CmmsTodoJobsController::edit/$1');
 	$routes->get('cmms_todo_jobs/detail/(:any)','CmmsTodoJobsController::detail/$1');
+	$routes->get('cmms_todo_jobs/jobs_by_ast/(:any)','CmmsTodoJobsController::jobs_by_ast/$1');
 	$routes->get('cmms_todo_jobs/tdjb_by_asst/(:any)','CmmsTodoJobsController::tdjb_by_asst/$1');
 	$routes->post('cmms_todo_jobs/update','CmmsTodoJobsController::update');
 	$routes->get('cmms_todo_jobs/delete/(:any)','CmmsTodoJobsController::delete/$1');
@@ -82,5 +84,7 @@ $routes->group('', ['namespace' => 'Matleyx\CI4CMMS\Controllers'], static functi
 	$routes->get('cmms_manteiners/edit/(:any)','CmmsManteinersController::edit/$1');
 	$routes->post('cmms_manteiners/update','CmmsManteinersController::update');
 	$routes->get('cmms_manteiners/delete/(:any)','CmmsManteinersController::delete/$1');
+	//Report Routes
+	$routes->get('cmms_report/test','CmmsReportController::rp_test');
     
 });

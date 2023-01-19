@@ -49,8 +49,12 @@ class CmmsAssetsController extends Controller
 
 	public function add()
 	{
-		$data = array();
-		$data['cmms_buildings'] = $this->cmms_buildings->findAll();
+		$data['buildingdb'] = $this->cmms_buildings->findAll();
+		$buildings = '<option value="0">Scegli...</option>';
+		foreach ($data['buildingdb'] as $row) {
+			$buildings .= '<option value="' . $row['id_buil'] . '" class="form-control" id="asst_id_buil">' . utf8_encode($row['buil_description']) . '</option>';
+		}
+		$data['cmms_buildings'] = $buildings;
 		$data['cmms_sectors'] = $this->cmms_sectors->findAll();
 
 		return view('Matleyx\CI4CMMS\Views\cmms_assets/add', $data);
@@ -100,11 +104,21 @@ class CmmsAssetsController extends Controller
 
 	public function edit($id)
 	{
-		$data['cmms_buildings'] = $this->cmms_buildings->findAll();
-		$data['cmms_sectors'] = $this->cmms_sectors->findAll();
+		$data['value'] = $this->cmms_asset->j_find($id);
+		//$data['cmms_buildings'] = $this->cmms_buildings->findAll();
+		$data['buildingdb'] = $this->cmms_buildings->findAll();
+		$buildings = '<option value="0">Scegli...</option>';
+		foreach ($data['buildingdb'] as $row) {
+			if ($row['id_buil'] == $data['value']['asst_id_buil']){
+				$buildings .= '<option value="' . $row['id_buil'] . '" class="form-control" id="asst_id_buil" selected="selected">' . utf8_encode($row['buil_description']) . '</option>';
+			}else{
+				$buildings .= '<option value="' . $row['id_buil'] . '" class="form-control" id="asst_id_buil">' . utf8_encode($row['buil_description']) . '</option>';
+			}
+		}
+		$data['cmms_buildings'] = $buildings;
+		$data['cmms_sectors'] = $this->cmms_sectors->sec_by_bui($data['value']['asst_id_buil']);
 
-		$cmms_asset = $this->cmms_asset->find($id);
-		$data['value'] = $cmms_asset;
+		//$data['value'] = $cmms_asset;
 		return view('Matleyx\CI4CMMS\Views\cmms_assets/edit', $data);
 	}
 
@@ -140,8 +154,18 @@ class CmmsAssetsController extends Controller
 			'asst_note' => $asst_note,
 			'asst_revision' => $asst_revision
 		];
-		$this->cmms_asset->update($id, $insert_data);
-		return redirect('cmms_assets');
+		
+		if ($this->cmms_asset->update($id, $insert_data) == false) {
+			$data['errors'] = $this->cmms_asset->errors();
+			var_dump($data['errors']);
+			//return view('Matleyx\CI4CMMS\Views\cmms_assets/edit'.$id, $data);
+		} else {
+			echo 'nessun';
+			//return redirect('cmms_assets');
+		}
+
+		//$this->cmms_asset->update($id, $insert_data);
+		//return redirect('cmms_assets');
 	}
 
 	public function delete($id)
@@ -155,4 +179,30 @@ class CmmsAssetsController extends Controller
 			$data['cmms_assets'] = $this->cmms_asset->ass_by_sec($id_sect);
 			return view('Matleyx\CI4CMMS\Views\cmms_assets/index', $data);
 		}
+	function aj_sel_sect()
+	{
+		if ($this->request->isAjax()) {
+			$buil = $this->request->getPost('id_building');
+			$csrfHash_new = csrf_hash();
+			$sectordb = $this->cmms_sectors->where('sect_id_buil', $buil)->findAll();
+			foreach ($sectordb as $row) {
+				$ris = ['id_sect' => $row['id_sect'], 'sec_des' => $row['sect_description']];
+				$ris2[] = $ris;
+			}
+			$risultati = [
+				'result' => $ris2,
+				'csrfHash_new' => $csrfHash_new,
+			];
+			return $this->response->setJSON($risultati);
+		}
+	}
+	function generaStringaRandom($lunghezza)
+	{
+		$caratteri = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$stringaRandom = '';
+		for ($i = 0; $i < $lunghezza; $i++) {
+			$stringaRandom .= $caratteri[rand(0, strlen($caratteri) - 1)];
+		}
+		return $stringaRandom;
+	}
 }
