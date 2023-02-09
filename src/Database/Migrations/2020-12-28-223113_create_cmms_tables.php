@@ -8,18 +8,20 @@ use CodeIgniter\Database\Migration;
 
 class CreateCmmsTables extends Migration
 {
-///prova modifiche
+    ///prova modifiche
     private $prefix_table = 'cmms_';
-    private $tab_manteiners = array('tname' => 'manteiners', 'pr' => 'mtnr',);     // Pivot Table with Codeigniter Shield
-    private $tab_buildings = array('tname' => 'buildings', 'pr' => 'buil',);
-    private $tab_sectors = array('tname' => 'sectors', 'pr' => 'sect',);
-    private $tab_assets = array('tname' => 'assets', 'pr' => 'asst',);
-    private $tab_counters = array('tname' => 'counters', 'pr' => 'cont',);
-    private $tab_co_intervals = array('tname' => 'co_intervals', 'pr' => 'coin',); //Counter interval
-    private $tab_wd_intervals = array('tname' => 'wd_intervals', 'pr' => 'wdin',); //Working day interval
-    private $tab_todo_jobs = array('tname' => 'todo_jobs', 'pr' => 'tdjb',);
-    private $tab_spare_parts = array('tname' => 'spare_parts', 'pr' => 'sppa',);
-    private $tab_sched_jobs = array('tname' => 'sched_jobs', 'pr' => 'scjb',);
+    private $tab_manteiners = array('tname' => 'manteiners', 'pr' => 'mtnr', ); // Pivot Table with Codeigniter Shield
+    private $tab_buildings = array('tname' => 'buildings', 'pr' => 'buil', );
+    private $tab_sectors = array('tname' => 'sectors', 'pr' => 'sect', );
+    private $tab_assets = array('tname' => 'assets', 'pr' => 'asst', );
+    private $tab_counters = array('tname' => 'counters', 'pr' => 'cont', );
+    private $tab_co_intervals = array('tname' => 'co_intervals', 'pr' => 'coin', ); //Counter interval
+    private $tab_wd_intervals = array('tname' => 'wd_intervals', 'pr' => 'wdin', ); //Working day interval
+    private $tab_todo_jobs = array('tname' => 'todo_jobs', 'pr' => 'tdjb', );
+    private $tab_spare_parts = array('tname' => 'spare_parts', 'pr' => 'sppa', );
+    private $tab_sched_jobs = array('tname' => 'sched_jobs', 'pr' => 'scjb', );
+    private $tab_activity = array('tname' => 'activity', 'pr' => 'acti', );
+    private $tab_tj_act = array('tname' => 'tj_act', 'pr' => 'tjac', );
 
     public function up(): void
     {
@@ -141,7 +143,7 @@ class CreateCmmsTables extends Migration
         // To Do jobs
         $this->forge->addField([
             'id_' . $this->tab_todo_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
-            $this->tab_todo_jobs['pr'] . '_type' => ['type' => 'boolean', 'default' => 0],      //0 = Monit, 1 = Manut
+            $this->tab_todo_jobs['pr'] . '_type' => ['type' => 'boolean', 'default' => 0], //0 = Monit, 1 = Manut
             $this->tab_todo_jobs['pr'] . '_title' => ['type' => 'varchar', 'constraint' => 250],
             $this->tab_todo_jobs['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 250],
             $this->tab_todo_jobs['pr'] . '_tools' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
@@ -185,7 +187,7 @@ class CreateCmmsTables extends Migration
         $this->forge->addField([
             'id_' . $this->tab_sched_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             $this->tab_sched_jobs['pr'] . '_id_' . $this->tab_todo_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
-            $this->tab_sched_jobs['pr'] . '_status' => ['type' => 'int', 'constraint' => 2, 'unsigned' => true, 'default' => 0],//0=non iniziata, 1= incorso, 2=completata
+            $this->tab_sched_jobs['pr'] . '_status' => ['type' => 'int', 'constraint' => 2, 'unsigned' => true, 'default' => 0], //0=non iniziata, 1= incorso, 2=completata
             $this->tab_sched_jobs['pr'] . '_execute_by' => ['type' => 'varchar', 'constraint' => 250],
             $this->tab_sched_jobs['pr'] . '_time_exec_minut' => ['type' => 'int', 'constraint' => 4, 'unsigned' => true, 'default' => 0],
             $this->tab_sched_jobs['pr'] . '_comment' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
@@ -218,7 +220,38 @@ class CreateCmmsTables extends Migration
         $this->forge->addKey($this->tab_spare_parts['pr'] . '_id_' . $this->tab_assets['pr']);
         $this->forge->addForeignKey($this->tab_spare_parts['pr'] . '_id_' . $this->tab_assets['pr'], $this->prefix_table . '' . $this->tab_assets['tname'], 'id_' . $this->tab_assets['pr'], '', 'CASCADE');
         $this->forge->createTable($this->prefix_table . '' . $this->tab_spare_parts['tname']);
+
+        // Activity
+        $this->forge->addField([
+            'id_' . $this->tab_activity['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+            $this->tab_activity['pr'] . '_description' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
+            $this->tab_activity['pr'] . '_work' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
+            $this->tab_activity['pr'] . '_note' => ['type' => 'varchar', 'constraint' => 250, 'null' => true],
+            $this->tab_activity['pr'] . '_created_at' => ['type' => 'datetime', 'null' => true],
+            $this->tab_activity['pr'] . '_updated_at' => ['type' => 'datetime', 'null' => true],
+            $this->tab_activity['pr'] . '_deleted_at' => ['type' => 'datetime', 'null' => true],
+        ]);
+        $this->forge->addPrimaryKey('id_' . $this->tab_activity['pr']);
+        $this->forge->createTable($this->prefix_table . '' . $this->tab_activity['tname']);
+
+                // todojobs-activity
+                $this->forge->addField([
+                    'id_' . $this->tab_tj_act['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
+                    $this->tab_tj_act['pr'] . '_id_' . $this->tab_todo_jobs['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+                    $this->tab_tj_act['pr'] . '_id_' . $this->tab_activity['pr'] => ['type' => 'int', 'constraint' => 11, 'unsigned' => true],
+                    $this->tab_tj_act['pr'] . '_created_at' => ['type' => 'datetime', 'null' => true],
+                    $this->tab_tj_act['pr'] . '_updated_at' => ['type' => 'datetime', 'null' => true],
+                    $this->tab_tj_act['pr'] . '_deleted_at' => ['type' => 'datetime', 'null' => true],
+                ]);
+                $this->forge->addPrimaryKey('id_' . $this->tab_tj_act['pr']);
+                $this->forge->addKey($this->tab_tj_act['pr'] . '_id_' . $this->tab_todo_jobs['pr']);
+                $this->forge->addKey($this->tab_tj_act['pr'] . '_id_' . $this->tab_activity['pr']);
+                $this->forge->addForeignKey($this->tab_tj_act['pr'] . '_id_' . $this->tab_todo_jobs['pr'], $this->prefix_table . '' . $this->tab_todo_jobs['tname'], 'id_' . $this->tab_todo_jobs['pr'], '', 'CASCADE');
+                $this->forge->addForeignKey($this->tab_tj_act['pr'] . '_id_' . $this->tab_activity['pr'], $this->prefix_table . '' . $this->tab_activity['tname'], 'id_' . $this->tab_activity['pr'], '', 'CASCADE');
+                $this->forge->createTable($this->prefix_table . '' . $this->tab_tj_act['tname']);
     }
+
+
 
     // --------------------------------------------------------------------
 
@@ -236,6 +269,8 @@ class CreateCmmsTables extends Migration
         $this->forge->dropTable($this->prefix_table . '' . $this->tab_todo_jobs['tname'], true);
         $this->forge->dropTable($this->prefix_table . '' . $this->tab_sched_jobs['tname'], true);
         $this->forge->dropTable($this->prefix_table . '' . $this->tab_spare_parts['tname'], true);
+        $this->forge->dropTable($this->prefix_table . '' . $this->tab_activity['tname'], true);
+        $this->forge->dropTable($this->prefix_table . '' . $this->tab_tj_act['tname'], true);
 
         $this->db->enableForeignKeyChecks();
     }

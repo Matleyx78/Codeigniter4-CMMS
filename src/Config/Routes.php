@@ -85,6 +85,10 @@ $routes->group('', ['namespace' => 'Matleyx\CI4CMMS\Controllers'], static functi
 	$routes->post('cmms_manteiners/update','CmmsManteinersController::update');
 	$routes->get('cmms_manteiners/delete/(:any)','CmmsManteinersController::delete/$1');
 	//Report Routes
-	$routes->get('cmms_report/test','CmmsReportController::rp_test');
+	//$routes->get('cmms_report/tdjb_by_asst/(:any)','Cmms_report::tdjb_by_asst/$1');
+	$routes->get('cmms_report/tdjb_by_asst/(:any)','CmmsReportController::tdjb_by_asst/$1');
+	$routes->get('cmms_report/tdjb_by_sect/(:any)','CmmsReportController::tdjb_by_sect/$1');
+	$routes->get('cmms_report/tdjb_by_sect_scad/(:any)','CmmsReportController::tdjb_by_sect_scad/$1');
+	$routes->get('cmms_report/lav_con_mar','CmmsReportController::lav_con_mar');
     
 });
