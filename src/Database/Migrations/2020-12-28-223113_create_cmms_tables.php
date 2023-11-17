@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Matleyx\CI4CMMS\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateCmmsTables extends Migration
+class CmmsTables extends Migration
 {
     ///prova modifiche
     private $prefix_table = 'cmms_';
@@ -22,8 +20,7 @@ class CreateCmmsTables extends Migration
     private $tab_sched_jobs = array('tname' => 'sched_jobs', 'pr' => 'scjb', );
     private $tab_activity = array('tname' => 'activity', 'pr' => 'acti', );
     private $tab_tj_act = array('tname' => 'tj_act', 'pr' => 'tjac', );
-
-    public function up(): void
+    public function up()
     {
         // Manteiners
         $this->forge->addField([
@@ -251,11 +248,7 @@ class CreateCmmsTables extends Migration
                 $this->forge->createTable($this->prefix_table . '' . $this->tab_tj_act['tname']);
     }
 
-
-
-    // --------------------------------------------------------------------
-
-    public function down(): void
+    public function down()
     {
         $this->db->disableForeignKeyChecks();
 
