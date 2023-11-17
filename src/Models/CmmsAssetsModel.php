@@ -12,9 +12,10 @@ class CmmsAssetsModel extends Model
 	protected $insertID             = 0;
 	protected $returnType           = 'array';
 	protected $useSoftDeletes       = true;
-	protected $protectFields        = false;
+	protected $protectFields        = true;
 	protected $allowedFields        = [
-							'asst_title',
+							'asst_id_maccimpi',
+						'asst_title',
 						'asst_description',
 						'asst_id_sect',
 						'asst_id_buil',
@@ -38,6 +39,7 @@ class CmmsAssetsModel extends Model
 
 	// Validation
 	protected $validationRules      = [
+	'asst_id_maccimpi'=>'required',
 	'asst_title'=>'required',
 	'asst_description'=>'required',
 	'asst_id_sect'=>'required',
@@ -67,37 +69,19 @@ class CmmsAssetsModel extends Model
 	protected $beforeDelete         = [];
 	protected $afterDelete          = [];
 
-	//protected $builder = $db->table($table);
 	public function j_findAll(){
 		$this->select('*');
 		$this->join('cmms_buildings', 'cmms_buildings.id_buil = cmms_assets.asst_id_buil');
 		$this->join('cmms_sectors', 'cmms_sectors.id_sect = cmms_assets.asst_id_sect');
 		return $this->findAll();
 	}
-	public function get_all_cmms_assets($perPage = null, $offset = null)
-    {	
-		$builder = $this->db->table("cmms_assets");
-		return $builder
-			->select()
-			->join('cmms_buildings', 'cmms_buildings.id_buil = cmms_assets.asst_id_buil')
-			->join('cmms_sectors', 'cmms_sectors.id_sect = cmms_assets.asst_id_sect')
-			->limit($perPage, $offset)
-			->get()
-			->getResultArray();
-    }
+	
 	public function j_find($id){
 		$this->select('*');
 		$this->join('cmms_buildings', 'cmms_buildings.id_buil = cmms_assets.asst_id_buil');
 		$this->join('cmms_sectors', 'cmms_sectors.id_sect = cmms_assets.asst_id_sect');
 		return $this->find($id);
 	}
-
-	public function ass_by_sec($id_s){
-		$this->select('*');
-		$this->join('cmms_buildings', 'cmms_buildings.id_buil = cmms_assets.asst_id_buil');
-		$this->join('cmms_sectors', 'cmms_sectors.id_sect = cmms_assets.asst_id_sect');
-		$this->where('asst_id_sect', $id_s);
-		return $this->findAll();
-	}
+	
 
 }
