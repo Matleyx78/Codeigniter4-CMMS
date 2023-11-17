@@ -7,7 +7,7 @@ namespace Matleyx\CI4CMMS\Config;
 //use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Database\Config as DBConfig;
 
-class CmmsDatabase extends DBConfig
+class Database extends DBConfig
 {
 
     public $dbcmms = [
